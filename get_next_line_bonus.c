@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchagas- <bchagas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 23:24:42 by bchagas-          #+#    #+#             */
-/*   Updated: 2025/09/04 05:22:11 by bchagas-         ###   ########.fr       */
+/*   Updated: 2025/09/04 06:04:03 by bchagas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_read_text(int fd, char *text)
 {
@@ -97,41 +97,41 @@ char	*ft_trim_text(char *text)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest_text;
+	static char	*rest_text[1024];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024)
 		return (NULL);
-	rest_text = ft_read_text(fd, rest_text);
-	if (!rest_text)
+	rest_text[fd] = ft_read_text(fd, rest_text[fd]);
+	if (!rest_text[fd])
 		return (NULL);
-	line = ft_get_line(rest_text);
-	if (!line)
-		return (NULL);
-	rest_text = ft_trim_text(rest_text);
+	line = ft_get_line(rest_text[fd]);
+	rest_text[fd] = ft_trim_text(rest_text[fd]);
 	return (line);
 }
-// #include <stdio.h>
 // #include <fcntl.h>
+// #include <stdio.h>
 
 // int main(void)
 // {
-//     int fd;
-//     char *line;
-//     fd = STDIN_FILENO;
-//     fd = open("teste.txt", O_RDONLY);
-//     if (fd == -1)
-//     {
-//         perror("Erro ao abrir o arquivo");
-//         return (1);
-//     }
-//     // while ((line = get_next_line(fd)) != NULL)
-//     // {
-//     //     printf("%s\n", line);
-//     //     free(line);
-//     // }
-// 	line = get_next_line(fd);
-// 	printf("%s\n", line);
-//     close(fd);
-//     return (0);
+// 	int fd1 = open("file1.txt", O_RDONLY);
+// 	int fd2 = open("file2.txt", O_RDONLY);
+// 	char *line1, *line2;
+
+// 	while ((line1 = get_next_line(fd1)) || (line2 = get_next_line(fd2)))
+// 	{
+// 		if (line1)
+// 		{
+// 			printf("FD1: %s", line1);
+// 			free(line1);
+// 		}
+// 		if (line2)
+// 		{
+// 			printf("FD2: %s", line2);
+// 			free(line2);
+// 		}
+// 	}
+// 	close(fd1);
+// 	close(fd2);
+// 	return (0);
 // }
